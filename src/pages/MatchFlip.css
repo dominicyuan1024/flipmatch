@@ -5,6 +5,7 @@
   align-items: center;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
   background-color: #d4a76a;
   background-image: linear-gradient(rgba(169, 124, 80, 0.3) 1px, transparent 1px),
     linear-gradient(90deg, rgba(169, 124, 80, 0.3) 1px, transparent 1px), linear-gradient(rgba(139, 94, 60, 0.1) 1px, transparent 1px),
@@ -17,6 +18,7 @@
 .wrap::before {
   content: "";
   position: fixed;
+  z-index: -1;
   top: 0;
   left: 0;
   width: 100%;
@@ -99,7 +101,7 @@
 
 .playGround {
   max-width: 400px;
-  margin: 2rem 0;
+  margin: 1rem 0;
 }
 
 .box {
@@ -132,6 +134,14 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   color: #4c47d0;
+  overflow: hidden;
+}
+.cell span{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 .cell span.upSideDown {
   transform: scaleY(-1) scaleX(-1);
@@ -184,6 +194,7 @@
 }
 .pop {
   position: fixed;
+  z-index: 10;
   top: 0;
   left: 0;
   width: 100vw;
@@ -239,14 +250,16 @@
 }
 .skins p {
   cursor: pointer;
+  text-align: center;
 }
 .skins .using::after {
   content: "✅";
 }
 .skins .skinItems {
-  position: absolute;
   text-align: center;
   left: 0;
   right: 0;
-  padding: 2rem;
+  padding: 1rem;
+  max-width: 400px;
+  margin: auto;
 }

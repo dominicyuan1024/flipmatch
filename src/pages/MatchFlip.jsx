@@ -1,12 +1,16 @@
 import { useImmer } from "use-immer";
 import "./MatchFlip.css";
 import { useEffect } from "react";
-
-const animals = ["🐭", "🐮", "🐯", "🐰", "🐉", "🐍", "🐴", "🐑", "🐵", "🐔", "🐶", "🐷", "🐱", "🐻", "🦢", "🦌", "🐘", "🐸"];
-const fruits = ["🍎", "🍌", "🍇", "🍓", "🫒", "🍅", "🍉", "🍑", "🌶️", "🍆", "🍒", "🥝", "🍐", "🫐", "🥥", "🥑", "🌰", "🍈"];
-const music = ["🎸", "🎻", "🎷", "🎺", "🪕", "🥁", "🎹", "🪘", "📯", "🪇", "🪈", "🎤", "🔔", "🎼", "🪗", "🎧", "🪔", "🎜"];
+import Sound from "./media/sound.js";
+import { animals, fruits, music } from "./skins/skins.js";
+const skins = [
+  { val: "animals", label: "动物农场", format: "text", items: animals },
+  { val: "fruits", label: "水果王国", format: "text", items: fruits },
+  { val: "music", label: "演奏大师", format: "text", items: music },
+];
 const urlParams = new URLSearchParams(window.location.search);
 const debugMode = urlParams.get("debug") === "true";
+const sounder = new Sound();
 
 function makeRandomCells(owner = "", fliped = false) {
   const cellList = [];
@@ -30,11 +34,23 @@ function User({ id = "", active = false, nickname, score = 0 }) {
   );
 }
 
-function MatchFlipCell({ id, skin, fliped, upSideDown, owner, handleFlip }) {
+function MatchFlipCell({ id, skin, skinFormat, fliped, upSideDown, owner, handleFlip }) {
   const className = `cell ${owner ? "ownedBy" + owner : ""}`;
+  function Content() {
+    const classNames = upSideDown ? "upSideDown" : null;
+    if (!fliped) {
+      return <span className={classNames}>{owner ? null : "?"}</span>;
+    }
+    if (skinFormat === "text") {
+      return <span className={classNames}>{skin}</span>;
+    } else if (skinFormat === "image") {
+      const sytles = { backgroundImage: `url(${skin})`, backgroundSize: "cover" };
+      return <span className={classNames} style={sytles}></span>;
+    }
+  }
   return (
     <div className={className} onClick={() => handleFlip(id)} debugNum={debugMode ? skin : ""}>
-      <span className={`${upSideDown ? "upSideDown" : ""}`}>{fliped ? skin : "?"}</span>
+      <Content></Content>
     </div>
   );
 }
@@ -61,6 +77,28 @@ function Tools({ shuffle, showRules, showSkins }) {
       </button>
     </div>
   );
+}
+
+function SkinItems({ format, items }) {
+  if (format === "text") {
+    return <p className="skinItems">{items.join(" ")}</p>;
+  } else if (format === "image") {
+    return (
+      <p className="skinItems">
+        {items.map((skin) => {
+          const sytles = {
+            backgroundImage: `url(${skin})`,
+            backgroundSize: "cover",
+            width: "2.5rem",
+            height: "2.5rem",
+            display: "inline-block",
+            borderRadius: "50%",
+          };
+          return <span style={sytles}></span>;
+        })}
+      </p>
+    );
+  }
 }
 
 function MatchFlip() {
@@ -127,11 +165,6 @@ function MatchFlip() {
   const [isShowRules, updateIsShowRules] = useImmer(false);
 
   const [isShowSkins, updateIsShowSkins] = useImmer(false);
-  const skins = [
-    { val: "animals", label: "动物农场", items: animals },
-    { val: "fruits", label: "水果王国", items: fruits },
-    { val: "music", label: "演奏大师", items: music },
-  ];
   const [usingSkin, updateUsingSkin] = useImmer(() => {
     const cacheUsingSkin = window.localStorage.getItem("usingSkin");
     let usingIdx = skins.findIndex((item) => item.val === cacheUsingSkin);
@@ -142,7 +175,7 @@ function MatchFlip() {
     window.localStorage.setItem("usingSkin", usingSkin);
   }, [usingSkin]);
 
-  const skinStoreObj = skins.find((item) => {
+  let skinStoreObj = skins.find((item) => {
     return item.val === usingSkin;
   });
   const skinStore = skinStoreObj ? skinStoreObj.items : skins[0].items;
@@ -182,10 +215,12 @@ function MatchFlip() {
         // handlePending(pendingMatched);
         cell.owner = curUser;
         anotherFlipedCell.owner = curUser;
+        sounder.playSound("success");
         return;
       }
       if (anotherFlipedCell.code !== cell.code) {
         handlePending(pendingDismatched);
+        sounder.playSound("error");
         return;
       }
     });
@@ -205,6 +240,7 @@ function MatchFlip() {
             <MatchFlipCell
               key={item.id}
               id={item.id}
+              skinFormat={skinStoreObj.format}
               skin={skinStore[item.code]}
               fliped={item.fliped}
               upSideDown={curUser === userBlack}
@@ -226,7 +262,7 @@ function MatchFlip() {
                 </p>
               );
             })}
-            <p className="skinItems">{skinStore.join(" ")}</p>
+            <SkinItems format={skinStoreObj.format} items={skinStore} />
           </div>
         </Notification>
       )}
