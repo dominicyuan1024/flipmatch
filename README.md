@@ -5,12 +5,12 @@
 ## 规则
 1. 玩家轮流翻开两张卡
 2. 成功可继续行动，失败轮到下一位
-3. 最终谁收集最多配对谁胜出
+3. 最终谁收集最多配对谁胜出  
 ![alt text](docs/rules.png)
 ![alt text](docs/finish.png)
 
 ## 皮肤
-目前支持三种皮肤
+目前支持三种皮肤  
 ![alt text](docs/skins.png)
 
 ## TODO
