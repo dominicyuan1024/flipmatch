@@ -271,7 +271,7 @@ function MatchFlip() {
           <ul className="rules">
             <li>① 👆代表当前玩家 </li>
             <li>② 玩家轮流翻开两张卡</li>
-            <li>③ 成功配对可继续行动，失败轮到下一位</li>
+            <li>③ 成功可继续行动，失败轮到下一位</li>
             <li>④ 最终谁收集最多配对谁胜出</li>
           </ul>
         </Notification>

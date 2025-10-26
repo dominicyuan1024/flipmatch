@@ -1,16 +1,19 @@
-# React + Vite
+# Flip Match
+一个益智小游戏，适合大人陪同小孩一起玩，考验记忆力，帮助小孩记忆词汇
+![alt text](docs/doing.png)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 规则
+1. 玩家轮流翻开两张卡
+2. 成功可继续行动，失败轮到下一位
+3. 最终谁收集最多配对谁胜出
+![alt text](docs/rules.png)
+![alt text](docs/finish.png)
 
-Currently, two official plugins are available:
+## 皮肤
+目前支持三种皮肤
+![alt text](docs/skins.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## TODO
+* 自定义皮肤，支持图片上传
+* 得分动画
+* 离线功能
